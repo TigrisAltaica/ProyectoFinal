@@ -119,6 +119,13 @@ function contiene(B::Bola,x)
      
 end
 
+function ==(A::Bola,B::Bola)
+
+    return( A.centro==B.centro && A.radio==B.radio )
+    
+end
+    
+
 function +(A::Bola,B::Bola)
     
     return(Bola(A.centro+B.centro,UpSum(A.radio,B.radio)))
@@ -141,13 +148,21 @@ end
 
 function -(A::Bola,c)
     
-    return(Bola(A.centro+c,A.radio))
+    return(Bola(A.centro-c,A.radio))
 end
 
 function -(c,A::Bola)
     
-    return(Bola(A.centro-c,A.radio))
+    return(Bola(c-A.centro,A.radio))
 end   
+
+function *(c::Real, A::Bola)
+    return(Bola(c*A.centro,A.radio))
+end
+
+function *(A::Bola,c::Real)
+    return(Bola(c*A.centro,A.radio))
+end
 
 end 
     
