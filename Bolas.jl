@@ -1,7 +1,7 @@
 module Bolas
 
 import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,Base.asin,Base.acos,Base.atan,Base.acot,Base.asec,Base.acsc,Base.sinh,Base.cosh,Base.tanh,Base.coth,Base.sech,Base.csch
-export Bola, distancia, contiene
+export Bola, distancia, contiene, norma
 
 #Estas funciones sirven para hacer aritmética con redondeo dirigido
 
@@ -97,6 +97,12 @@ function distancia(A::Bola,B::Bola) #Mide la distancia entre dos puntos
 
 end
 
+function norma(A) #Me dá la norma de un vector o un punto
+
+    return(distancia(A,zeros(length(A))))
+
+end
+
 
 function contiene(B::Bola,x)
 
@@ -146,12 +152,43 @@ function -(c,A::Bola)
 end   
 
 function *(c::Real, A::Bola)
-    return(Bola(c*A.centro,A.radio))
+    return(Bola(c*A.centro,c*A.radio))
 end
 
 function *(A::Bola,c::Real)
-    return(Bola(c*A.centro,A.radio))
+    return(Bola(c*A.centro,c*A.radio))
 end
+
+function *(A::Bola,B::Bola)
+    return(Bola(A.centro*B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(B.centro),A.radio))))
+end
+
+function /(A::Bola,B::Bola)
+    
+    if contiene(B,0)
+        error("No se puede dividir por una bola que contine el 0")
+    end
+    
+    return(Bola(A.centro/B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(B.centro),A.radio))))
+end
+
+function ^(A::Bola, n::Int)
+    
+    if n == 0
+        return Bola(1,0)
+    end
+    
+    if n == 1
+        
+        return A
+    end
+    
+    
+    return Bola(A.centro^n,n*abs(A.centro)^(n-1)*A.radio+n*(n-1)*abs(A.centro)^(n-2)*A.radio)
+end
+
+
+#Funciones elementales
 
 function sin(A::Bola)
 return Bola(sin(A.centro),A.radio*cos(A.centro))
