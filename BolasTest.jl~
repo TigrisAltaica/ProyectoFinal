@@ -13,9 +13,12 @@ facts("Pruebas de funciones para bolas :") do
         
     A = Bola(0,1)
     B = Bola(1,2)
+    C = Bola(0,.1)
     
+    @fact contiene(C,.1) => true 
     @fact contiene(A,A.centro) => true
     @fact contiene(A,A.centro+A.radio) => true
+    @fact contiene(A,A.centro-A.radio) => true
     @fact contiene(A,A.centro+2*A.radio) => false
     @fact distancia(A.centro,A.centro+A.radio) => A.radio
     @fact distancia(A,B) => 1
@@ -28,6 +31,7 @@ facts("Prueba básicas de aritmética:") do
         
     A = Bola(0,1)
     B = Bola(1,2)
+    C = Bola(5,.2)  
     
     @fact A+B => Bola(1,3)
     @fact A+B => B+A
@@ -41,7 +45,15 @@ facts("Prueba básicas de aritmética:") do
     
     @fact 1*A => A
     @fact 2*B => B*2
-    @fact 0*A => Bola(0)
+<<<<<<< HEAD
+     @fact 0*A => Bola(0,0)
+    
+    @fact A*B => B*A
+    @fact contiene(A*B,(A.centro+A.radio)*(B.centro+B.radio)) => true
+    @fact contiene(A*B,(A.centro-A.radio)*(B.centro-B.radio)) => true
+    
+    @fact contiene(B/C,(B.centro+B.radio)/(C.centro-C.radio)) => true
+    @fact contiene(B/C,(B.centro-B.radio)*(C.centro+C.radio)) => true
 
     
 end
@@ -80,6 +92,9 @@ facts("Pruebas de funciones elementales") do
     @fact log(C) => Bola(0,1)
     
     
+=======
+   
+>>>>>>> 98f84a32c98da6d23e288f5f956dcba8ea1963c2
 
     
 end
