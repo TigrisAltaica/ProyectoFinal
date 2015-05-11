@@ -84,28 +84,16 @@ function distancia(x,y) #Mide la distancia entre dos puntos
     dist=0
     
     for i=1:length(x)
-        dist=UpSum(dist,DownSubs(x[i],y[i])^2)
+        dist=UpSum(dist,(x[i]-y[i])^2)
     end
     
     return(sqrt(dist))
 end
     
 function distancia(A::Bola,B::Bola) #Mide la distancia entre dos puntos
-    
-    x=A.centro
-    y=B.centro
-    
-    if length(x) != length(y)
-        error("Error: ambos puntos deben tener el mismo numero de entradas")
-    end
-    
-    dist=0
-    
-    for i=1:length(x)
-        dist+=(x[i]-y[i])^2
-    end
-    
-    return(sqrt(dist))
+
+    return(distancia(A.centro,B.centro))
+
 end
 
 
