@@ -1,7 +1,11 @@
 module Bolas
 
 import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,Base.asin,Base.acos,Base.atan,Base.acot,Base.asec,Base.acsc,Base.sinh,Base.cosh,Base.tanh,Base.coth,Base.sech,Base.csch
+<<<<<<< HEAD
+
+
 export Bola, distancia, contiene, norma
+>>>>>>> 98f84a32c98da6d23e288f5f956dcba8ea1963c2
 
 #Estas funciones sirven para hacer aritmética con redondeo dirigido
 
@@ -74,6 +78,8 @@ type Bola
    
     Bola(c) = new(c,1)
     Bola(c,r) = r < 0 ? new(c,abs(r)) : new(c,r)
+    
+    
 end
 
 function distancia(x,y) #Mide la distancia entre dos puntos
