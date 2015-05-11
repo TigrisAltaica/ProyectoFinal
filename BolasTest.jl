@@ -57,4 +57,41 @@ facts("Prueba básicas de aritmética:") do
     
 end
 
+facts("Pruebas de funciones elementales") do
+    
+        
+    A=Bola(pi,pi/2)
+    B=Bola(1/sqrt(2),1)
+    C=Bola(1,1)
+    D=Bola(sqrt(2),1)
+    E=Bola(0,1)
+    
+    @fact sin(A) => Bola(0,(pi/2)*1)
+    @fact cos(A) => Bola(-1,(pi/2)*1)
+    @fact tan(A) => Bola(0,(pi/2)*1)
+    @fact cot(A) => Bola(Inf,(pi/2)*0)
+    @fact sec(A) => Bola(-1,(pi/2)*0)
+    @fact csc(A) => Bola(Inf,(pi/2)*Inf)
+    
+    @fact asin(B) => Bola(pi/4,sqrt(2))
+    @fact acos(B) => Bola(pi/4,sqrt(2))
+    @fact atan(C) => Bola(pi/4,.5)
+    @fact acot(C) => Bola(pi/4,.5)
+    @fact asec(D) => Bola(pi/4,1/sqrt(2))
+    @fact acsc(D) => Bola(pi/4,1/sqrt(2))
+    
+    @fact sinh(E) => Bola(0,1)
+    @fact cosh(E) => Bola(1,0)
+    @fact tanh(E) => Bola(0,1)
+    @fact coth(E) => Bola(Inf,Inf)
+    @fact sech(E) => Bola(1,0)
+    @fact csch(E) => Bola(Inf,Inf)
+    
+    @fact exp(E) => Bola(1,1)
+    @fact log(C) => Bola(0,1)
+    
+   
+    
+end
+
 end
