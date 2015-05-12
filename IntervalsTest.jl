@@ -1,0 +1,43 @@
+module IntervalsTest
+
+using Intervals, FactCheck
+
+facts("Prueba básicas de Intervalos:") do
+    
+    A = Interval(1,2)
+    B = Interval(3,4)
+    C = Interval(4.0,6.0)
+    D = Interval(-1,1)
+    E = Interval(-2,-1)
+    F = Interval(3.5,5)
+    
+    @fact A + B => C
+    @fact A - B => Interval(-3.0,-1.0)
+    @fact A*B => Interval(3,8)
+    @fact A/B => Interval(.25,0.6666666666666667)
+    @fact contains(midpoint(C),5) => true
+    @fact contains(B, 1.0) => false
+    @fact contains(B, midpoint(B)) => true
+    @fact D^2 => Interval(0,1)
+    @fact D^3 => Interval(-1,1)
+    @fact A+2.0 => Interval(3,4)
+    @fact 2.0B => Interval(6,8)
+    @fact contains(Interval(0.1,.1),0.1) => true
+    @fact Interval(2,1) => Interval(1,2)
+    @fact -1.0A => Interval(-2,-1)
+    @fact exp(A) => Interval(exp(A.a),exp(A.b))
+    @fact log(A) => Interval(log(A.a),log(A.b))
+    @fact log(exp(B)) => B
+    @fact exp(log(C)) => C
+    @fact D^2.3 => Interval(0,1)
+    @fact_throws E^1.3
+    @fact contains(cos(A),cos(A.a)) => true
+    @fact contains(cos(A),cos(A.b)) => true
+    @fact 1/E => Interval(-1,-.5)
+    @fact 1 - A => Interval(-1,0) 
+    @fact Intersection(B,F) => Intersection(F,B)
+    @fact Intersection(B,F) => Interval(3.5,4)
+    
+end
+
+end
