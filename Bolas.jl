@@ -3,7 +3,7 @@ module Bolas
 import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,Base.asin,Base.acos,Base.atan,Base.acot,Base.asec,Base.acsc,Base.sinh,Base.cosh,Base.tanh,Base.coth,Base.sech,Base.csch
 
 
-export Bola, distancia, contiene, norma
+export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas
 
 
 #Estas funciones sirven para hacer aritmética con redondeo dirigido
@@ -129,9 +129,15 @@ function ==(A::Bola,B::Bola)
     
 end
 
-function bisectar_bola(B::Bola)
+function bisectar_bolas(B)
     
-    return([Bola(B.centro-.5*B.radio,.5*B.radio),Bola(B.centro+.5*B.radio,.5*B.radio)])
+    temp=Bola[]
+    
+    for i=1:length(B)
+        append!(temp,[Bola(B[i].centro-.5*B[i].radio,.5*B[i].radio),Bola(B[i].centro+.5*B[i].radio,.5*B[i].radio)])
+    end
+    
+    return(temp)
     
 end
 
@@ -213,9 +219,9 @@ end
 
 function /(A::Bola,B::Bola)
     
-    if contiene(B,0)
-        error("No se puede dividir por una bola que contine el 0")
-    end
+   # if contiene(B,0)
+    #    error("No se puede dividir por una bola que contine el 0")
+    #end
     
     return(Bola(A.centro/B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(B.centro),A.radio))))
 end
