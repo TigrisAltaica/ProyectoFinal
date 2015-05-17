@@ -109,7 +109,7 @@ function norma(A) #Me dá la norma de un vector o un punto
 end
 
 
-function contiene(B::Bola,x)
+function contiene(B::Bola,x::Real)
 
     if distancia(B.centro,x)<= B.radio
         return(true)
@@ -119,10 +119,53 @@ function contiene(B::Bola,x)
      
 end
 
+function contiene(A::Bola,B::Bola)
+    return(contiene(A,B.centro+B.radio)&&contiene(A,B.centro-B.radio)) 
+end
+
 function ==(A::Bola,B::Bola)
 
     return( A.centro==B.centro && A.radio==B.radio )
     
+end
+
+function bisectar_bola(B::Bola)
+    
+    return([Bola(B.centro-.5*B.radio,.5*B.radio),Bola(B.centro+.5*B.radio,.5*B.radio)])
+    
+end
+
+
+
+function interseccion_de_bolas(A::Bola, B::Bola)
+    
+    if contiene(A,B)
+        return(B)
+    end
+    
+    if contiene(B,A)
+        return(A)
+    end
+    
+    if A.centro > B.centro
+        
+        if A.centro-A.radio > B.centro + B.radio
+            return(nothing)
+        end
+        
+        return(Bola((A.centro-A.radio+B.centro+B.radio)*.5,distancia((A.centro-A.radio+B.centro+B.radio)*.5,A.centro-A.radio)))
+        
+    end
+    
+    if B.centro > A.centro
+        
+        if B.centro-B.radio > A.centro + A.radio
+            return(nothing)
+        end
+        
+        return(Bola((B.centro-B.radio+A.centro+A.radio)*.5,distancia((B.centro-B.radio+A.centro+A.radio)*.5,B.centro-B.radio)))
+        
+    end
 end
     
 
