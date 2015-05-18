@@ -3,7 +3,7 @@ module Bolas
 import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,Base.asin,Base.acos,Base.atan,Base.acot,Base.asec,Base.acsc,Base.sinh,Base.cosh,Base.tanh,Base.coth,Base.sech,Base.csch
 
 
-export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas
+export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas, operador_de_newton, quitar_no_deseadas
 
 
 #Estas funciones sirven para hacer aritmética con redondeo dirigido
@@ -140,6 +140,31 @@ function bisectar_bolas(B)
     return(temp)
     
 end
+
+function quitar_no_deseadas(F::Function,B,x)
+    
+    temp=Bola[]
+    dF(x)=F(makex(x)).d
+    
+    for i=1:length(B)
+        if contiene(F(B[i]),x)
+            push!(temp,B[i])
+        end
+    end
+    
+    return(temp)
+    
+    
+end
+
+function operador_de_newton_bola(F::Function,B::Bola)
+    
+    dF(x)=F(makex(x)).d
+    m=Bola(B.centro,0)
+    
+    return (m-F(m)/(dF(B)))
+    
+end   
 
 
 
