@@ -183,7 +183,12 @@ function /(A::Bola,B::Bola)
 end
 
 function ^(A::Bola, n::Int)
-    
+
+    if n == -1
+        return Bola(1,0)/A
+    end    
+
+
     if n == 0
         return Bola(1,0)
     end
