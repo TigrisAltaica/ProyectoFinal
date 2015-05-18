@@ -1,7 +1,5 @@
 Pruebas.ipynb
-.ipynb_checkpoints/*
+.ipynb_checkpoints/
 ~Bolas.jl
 ~Derivatives.jl
 ~BolasTest.jl
-.gitignore~
-Bolas.jl~
