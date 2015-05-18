@@ -45,8 +45,7 @@ facts("Prueba básicas de aritmética:") do
     
     @fact 1*A => A
     @fact 2*B => B*2
-<<<<<<< HEAD
-     @fact 0*A => Bola(0,0)
+    @fact 0*A => Bola(0,0)
     
     @fact A*B => B*A
     @fact contiene(A*B,(A.centro+A.radio)*(B.centro+B.radio)) => true
@@ -58,28 +57,26 @@ facts("Prueba básicas de aritmética:") do
     
 end
 
-facts("Pruebas de funciones elementales") do
+facts("Pruebas de funciones elementales:") do
     
-        
-    A=Bola(pi,pi/2)
-    B=Bola(1/sqrt(2),1)
+   B=Bola(1/sqrt(2),1/sqrt(2))
     C=Bola(1,1)
     D=Bola(sqrt(2),1)
     E=Bola(0,1)
     
-    @fact sin(A) => Bola(0,(pi/2)*1)
-    @fact cos(A) => Bola(-1,(pi/2)*1)
-    @fact tan(A) => Bola(0,(pi/2)*1)
-    @fact cot(A) => Bola(Inf,(pi/2)*0)
-    @fact sec(A) => Bola(-1,(pi/2)*0)
-    @fact csc(A) => Bola(Inf,(pi/2)*Inf)
+    @fact sin(E) => Bola(0,1)
+    @fact cos(E) => Bola(1,0)
+    @fact tan(E) => Bola(0,1)
+    @fact cot(E) => Bola(Inf,Inf)
+    @fact sec(E) => Bola(1,0)
+    @fact csc(E) => Bola(Inf,Inf)
     
-    @fact asin(B) => Bola(pi/4,sqrt(2))
-    @fact acos(B) => Bola(pi/4,sqrt(2))
-    @fact atan(C) => Bola(pi/4,.5)
-    @fact acot(C) => Bola(pi/4,.5)
-    @fact asec(D) => Bola(pi/4,1/sqrt(2))
-    @fact acsc(D) => Bola(pi/4,1/sqrt(2))
+    @fact asin(E) => Bola(0,1)
+    @fact acos(E) => Bola(acos(BigFloat(0)),1)
+    @fact atan(C) => Bola(atan(BigFloat(1)),.5)
+    @fact acot(C) => Bola(atan(BigFloat(1)),.5)
+    @fact asec(C) => Bola(0,Inf)
+    @fact acsc(C) => Bola(acsc(BigFloat(1)),Inf)
     
     @fact sinh(E) => Bola(0,1)
     @fact cosh(E) => Bola(1,0)
@@ -92,9 +89,8 @@ facts("Pruebas de funciones elementales") do
     @fact log(C) => Bola(0,1)
     
     
-=======
+    
    
->>>>>>> 98f84a32c98da6d23e288f5f956dcba8ea1963c2
 
     
 end
