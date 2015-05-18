@@ -88,10 +88,14 @@ facts("Pruebas de funciones elementales:") do
     @fact exp(E) => Bola(1,1)
     @fact log(C) => Bola(0,1)
     
+<<<<<<< HEAD
+   
+=======
     
     
    
 
+>>>>>>> IxidorMcDuck-Pablo
     
 end
 
