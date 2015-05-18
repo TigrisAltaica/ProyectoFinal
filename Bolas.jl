@@ -3,6 +3,7 @@ module Bolas
 import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,Base.asin,Base.acos,Base.atan,Base.acot,Base.asec,Base.acsc,Base.sinh,Base.cosh,Base.tanh,Base.coth,Base.sech,Base.csch
 
 
+
 export Bola, distancia, contiene, norma
 
 
@@ -79,7 +80,7 @@ type Bola
     Bola(c,r) = r < 0 ? new(c,abs(r)) : new(c,r)
     
     
-end
+ end
 
 function distancia(x,y) #Mide la distancia entre dos puntos
     
@@ -121,7 +122,11 @@ end
 
 function ==(A::Bola,B::Bola)
 
-    return( A.centro==B.centro && A.radio==B.radio )
+     if A.centro==B.centro && A.radio==B.radio 
+     return true
+     else
+     return false
+     end
     
 end
     
@@ -196,19 +201,20 @@ end
 #Funciones elementales
 
 function sin(A::Bola)
-return Bola(sin(A.centro),A.radio*cos(A.centro))
+return Bola(sin(A.centro),sin(A.centro)*(cos(A.radio)-1)+sin(A.radio)*cos(A.centro))
 end
 
 function cos(A::Bola)
-return Bola(cos(A.centro),A.radio*sin(A.centro))
+return Bola(cos(A.centro),(cos(A.radio)-1)*cos(A.centro)+sin(A.radio)*sin(A.centro))
 end
 
 function exp(A::Bola)
-return Bola(exp(A.centro),exp(A.centro)*A.radio)
+
+return Bola(exp(A.centro),exp(A.centro)*(cosh(A.radio)+sinh(A.radio)-1))
 end
 
 function log(A::Bola)
-return Bola(log(A.centro),A.radio/A.centro)
+return Bola(log(A.centro),log(A.centro/(A.centro-A.radio)))
 end
 
 function tan(A::Bola)
