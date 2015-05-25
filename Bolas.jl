@@ -244,11 +244,11 @@ end
 
 function /(A::Bola,B::Bola)
     
-    #if contiene(B,0)
-     #   error("No se puede dividir por una bola que contine el 0")
-    #end
+    if contiene(B,0)
+       error("No se puede dividir por una bola que contine el 0")
+    end
     
-    return(Bola(A.centro/B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(B.centro),A.radio))))
+    return(Bola(A.centro/B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(1/B.centro),A.radio))))
 end
 
 function ^(A::Bola, n::Int)
