@@ -1,4 +1,4 @@
-module ConversionBolaIntervalo
+module BolaIntervalo
 
 using Intervals, Bolas
 
