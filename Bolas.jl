@@ -91,7 +91,7 @@ function distancia(x,y) #Mide la distancia entre dos puntos
     dist=0
     
     for i=1:length(x)
-        dist=UpSum(dist,(x[i]-y[i])^2)
+        dist+=(x[i]-y[i])^2
     end
     
     return(sqrt(dist))
