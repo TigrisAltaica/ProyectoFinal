@@ -59,44 +59,79 @@ end
 
 facts("Pruebas de funciones elementales:") do
     
-   B=Bola(1/sqrt(2),1/sqrt(2))
-    C=Bola(1,1)
-    D=Bola(sqrt(2),1)
-    E=Bola(0,1)
+    A=Bola(5,1)
+    E=Bola(.5,.1)
     
-    @fact sin(E) => Bola(0,1)
-    @fact cos(E) => Bola(1,0)
-    @fact tan(E) => Bola(0,1)
-    @fact cot(E) => Bola(Inf,Inf)
-    @fact sec(E) => Bola(1,0)
-    @fact csc(E) => Bola(Inf,Inf)
+    @fact contiene(sin(E),sin(.6)) => true
+    @fact contiene(sin(E),sin(.5)) => true
+    @fact contiene(sin(E),sin(.4)) => true
+    @fact contiene(cos(E),cos(.599999999999)) => true
+    @fact contiene(cos(E),cos(.5)) => true
+    @fact contiene(cos(E),cos(.4)) => true
+    @fact contiene(tan(E),tan(.6)) => true
+    @fact contiene(tan(E),tan(.5)) => true
+    @fact contiene(tan(E),tan(.4)) => true
+    @fact contiene(cot(E),cot(.6)) => true
+    @fact contiene(cot(E),cot(.5)) => true
+    @fact contiene(cot(E),cot(.4)) => true
+    @fact contiene(sec(E),sec(.6)) => true
+    @fact contiene(sec(E),sec(.5)) => true
+    @fact contiene(sec(E),sec(.4)) => true
+    @fact contiene(csc(E),csc(.6)) => true
+    @fact contiene(csc(E),csc(.5)) => true
+    @fact contiene(csc(E),csc(.4)) => true
     
-    @fact asin(E) => Bola(0,1)
-    @fact acos(E) => Bola(acos(BigFloat(0)),1)
-    @fact atan(C) => Bola(atan(BigFloat(1)),.5)
-    @fact acot(C) => Bola(atan(BigFloat(1)),.5)
-    @fact asec(C) => Bola(0,Inf)
-    @fact acsc(C) => Bola(acsc(BigFloat(1)),Inf)
+    @fact contiene(asin(E),asin(.6)) => true
+    @fact contiene(asin(E),asin(.5)) => true
+    @fact contiene(asin(E),asin(.4)) => true
+    @fact contiene(acos(E),acos(.6)) => true
+    @fact contiene(acos(E),acos(.5)) => true
+    @fact contiene(acos(E),acos(.4)) => true
+    @fact contiene(atan(E),atan(.6)) => true
+    @fact contiene(atan(E),atan(.5)) => true
+    @fact contiene(atan(E),atan(.4)) => true
+    @fact contiene(acot(E),acot(.6)) => true
+    @fact contiene(acot(E),acot(.5)) => true
+    @fact contiene(acot(E),acot(.4)) => true
+    @fact contiene(asec(A),asec(6)) => true
+    @fact contiene(asec(A),asec(5)) => true
+    @fact contiene(asec(A),asec(4)) => true
+    @fact contiene(acsc(A),acsc(6)) => true
+    @fact contiene(acsc(A),acsc(5)) => true
+    @fact contiene(acsc(A),acsc(4)) => true
     
-    @fact sinh(E) => Bola(0,1)
-    @fact cosh(E) => Bola(1,0)
-    @fact tanh(E) => Bola(0,1)
-    @fact coth(E) => Bola(Inf,Inf)
-    @fact sech(E) => Bola(1,0)
-    @fact csch(E) => Bola(Inf,Inf)
-    
-    @fact exp(E) => Bola(1,1)
-    @fact log(C) => Bola(0,1)
-    
-<<<<<<< HEAD
+    @fact contiene(sinh(E),sinh(.6)) => true
+    @fact contiene(sinh(E),sinh(.5)) => true
+    @fact contiene(sinh(E),sinh(.4)) => true
+    @fact contiene(cosh(E),cosh(.6)) => true
+    @fact contiene(cosh(E),cosh(.5)) => true
+    @fact contiene(cosh(E),cosh(.4)) => true
+    @fact contiene(tanh(E),tanh(.6)) => true
+    @fact contiene(tanh(E),tanh(.5)) => true
+    @fact contiene(tanh(E),tanh(.4)) => true
+    @fact contiene(coth(E),coth(.6)) => true
+    @fact contiene(coth(E),coth(.5)) => true
+    @fact contiene(coth(E),coth(.4)) => true
+    @fact contiene(sech(E),sech(.6)) => true
+    @fact contiene(sech(E),sech(.5)) => true
+    @fact contiene(sech(E),sech(.4)) => true
+    @fact contiene(csch(E),csch(.6)) => true
+    @fact contiene(csch(E),csch(.5)) => true
+    @fact contiene(csch(E),csch(.4)) => true
    
-=======
-    
+    @fact contiene(exp(E),exp(.6)) => true
+    @fact contiene(exp(E),exp(.5)) => true
+    @fact contiene(exp(E),exp(.4)) => true
+    @fact contiene(log(E),log(.6)) => true
+    @fact contiene(log(E),log(.5)) => true
+    @fact contiene(log(E),log(.4)) => true
+  
+   
     
    
+    
+    
 
->>>>>>> IxidorMcDuck-Pablo
     
 end
-
 end

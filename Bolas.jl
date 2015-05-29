@@ -179,7 +179,7 @@ function /(A::Bola,B::Bola)
         error("No se puede dividir por una bola que contine el 0")
     end
     
-    return(Bola(A.centro/B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(B.centro),A.radio))))
+    return(Bola(A.centro/B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(1/B.centro),A.radio))))
 end
 
 function ^(A::Bola, n::Int)
@@ -206,84 +206,146 @@ end
 #Funciones elementales
 
 function sin(A::Bola)
-return Bola(sin(A.centro),sin(A.centro)*(cos(A.radio)-1)+sin(A.radio)*cos(A.centro))
+if A.centro>0
+s=UpSubs(1,cos(A.radio))
+else
+s=UpSubs(cos(A.radio),1)
+end
+return Bola(sin(A.centro),UpSum(UpProd(sin(A.centro),s),UpProd(sin(A.radio),cos(A.centro))))
 end
 
 function cos(A::Bola)
-return Bola(cos(A.centro),(cos(A.radio)-1)*cos(A.centro)+sin(A.radio)*sin(A.centro))
+if A.centro<(pi/2)
+s=UpSubs(1.0,cos(A.radio))
+else
+s=UpSubs(cos(A.radio),1.0)
+end
+return Bola(cos(A.centro),UpSum(UpProd(s,cos(A.centro)),UpProd(sin(A.radio),sin(A.centro))))
 end
 
 function exp(A::Bola)
 
-return Bola(exp(A.centro),exp(A.centro)*(cosh(A.radio)+sinh(A.radio)-1))
+return Bola(exp(A.centro),UpProd(exp(A.centro),UpSum(cosh(A.radio),UpSubs(sinh(A.radio),1))))
 end
 
 function log(A::Bola)
-return Bola(log(A.centro),log(A.centro/(A.centro-A.radio)))
+return Bola(log(A.centro),UpSubs(log(A.centro),log(A.centro-A.radio)))
 end
 
 function tan(A::Bola)
-return Bola(tan(A.centro),(sec(A.centro)^2)*A.radio)
+if A.centro>0
+s=UpSubs(1.0,UpProd(tan(A.radio),tan(A.centro)))
+else
+s=UpSum(1.0,UpProd(tan(A.centro),tan(A.radio)))
+end
+return Bola(tan(A.centro),UpDiv(UpProd(tan(A.radio),UpSum(1.0,UpProd(tan(A.centro),tan(A.centro)))),s))
 end
 
 function cot(A::Bola)
-return Bola(cot(A.centro),(csc(A.centro)^2)*A.radio)
+if A.centro>0
+s=UpSubs(tan(A.centro),tan(A.radio))
+else
+s=UpSum(tan(A.centro),tan(A.radio))
+end
+return Bola(cot(A.centro),UpProd(UpDiv(tan(A.radio),tan(A.centro)),UpDiv( UpSum(1,(tan(A.centro))^2),s )))
 end
 
 function sec(A::Bola)
-return Bola(sec(A.centro),tan(A.centro)*sec(A.centro)*A.radio)
+h=Array(Float64,2)
+h[1]=abs(UpSubs(sec(A.centro+A.radio),sec(A.centro)))
+h[2]=abs(UpSubs(sec(A.centro-A.radio),sec(A.centro)))
+return Bola(sec(A.centro),maximum(h))
 end
 
 function csc(A::Bola)
-return Bola(csc(A.centro),csc(A.centro)*cot(A.centro)*A.radio)
+h=Array(Float64,2)
+h[1]=abs(UpSubs(csc(A.centro+A.radio),csc(A.centro)))
+h[2]=abs(UpSubs(csc(A.centro-A.radio),csc(A.centro)))
+return Bola(csc(A.centro),maximum(h))
 end
 
 function asin(A::Bola)
-return Bola(asin(A.centro),A.radio/sqrt(1-(A.centro^2)))
+h=Array(Float64,2)
+h[1]=abs(UpSubs(asin(A.centro+A.radio),asin(A.centro)))
+h[2]=abs(UpSubs(asin(A.centro-A.radio),asin(A.centro)))
+return Bola(asin(A.centro),maximum(h))
 end
 
 function acos(A::Bola)
-return Bola(acos(A.centro),A.radio/sqrt(1-(A.centro^2)))
+h=Array(Float64,2)
+h[1]=abs(UpSubs(acos(A.centro+A.radio),acos(A.centro)))
+h[2]=abs(UpSubs(acos(A.centro-A.radio),acos(A.centro)))
+return Bola(acos(A.centro),maximum(h))
 end
 
 function atan(A::Bola)
-return Bola(atan(A.centro),A.radio/(1+(A.centro^2)))
+h=Array(Float64,2)
+h[1]=abs(UpSubs(atan(A.centro+A.radio),atan(A.centro)))
+h[2]=abs(UpSubs(atan(A.centro-A.radio),atan(A.centro)))
+return Bola(atan(A.centro),maximum(h))
 end
 
 function acot(A::Bola)
-return Bola(acot(A.centro),A.radio/(1+(A.centro^2)))
+h=Array(Float64,2)
+h[1]=abs(UpSubs(acot(A.centro+A.radio),acot(A.centro)))
+h[2]=abs(UpSubs(acot(A.centro-A.radio),acot(A.centro)))
+return Bola(acot(A.centro),maximum(h))
 end
 
 function asec(A::Bola)
-return Bola(asec(A.centro),A.radio/((A.centro^2)*sqrt(1-(A.centro^-2))))
+h=Array(Float64,2)
+h[1]=abs(UpSubs(asec(A.centro+A.radio),asec(A.centro)))
+h[2]=abs(UpSubs(asec(A.centro-A.radio),asec(A.centro)))
+return Bola(asec(A.centro),maximum(h))
 end
 
 function acsc(A::Bola)
-return Bola(acsc(A.centro),A.radio/((A.centro^2)*sqrt(1-(A.centro^-2))))
+h=Array(Float64,2)
+h[1]=abs(UpSubs(acsc(A.centro+A.radio),acsc(A.centro)))
+h[2]=abs(UpSubs(acsc(A.centro-A.radio),acsc(A.centro)))
+return Bola(acsc(A.centro),maximum(h))
 end
 
 function sinh(A::Bola)
-return Bola(sinh(A.centro),A.radio*cosh(A.centro))
+h=Array(Float64,2)
+h[1]=abs(UpSubs(sinh(A.centro+A.radio),sinh(A.centro)))
+h[2]=abs(UpSubs(sinh(A.centro-A.radio),sinh(A.centro)))
+return Bola(sinh(A.centro),maximum(h))
 end
 
 function cosh(A::Bola)
-return Bola(cosh(A.centro),A.radio*sinh(A.centro))
+h=Array(Float64,2)
+h[1]=abs(UpSubs(cosh(A.centro+A.radio),cosh(A.centro)))
+h[2]=abs(UpSubs(cosh(A.centro-A.radio),cosh(A.centro)))
+return Bola(cosh(A.centro),maximum(h))
 end
 
 function tanh(A::Bola)
-return Bola(tanh(A.centro),(sech(A.centro)^2)*A.radio)
+h=Array(Float64,2)
+h[1]=abs(UpSubs(tanh(A.centro+A.radio),tanh(A.centro)))
+h[2]=abs(UpSubs(tanh(A.centro-A.radio),tanh(A.centro)))
+return Bola(tanh(A.centro),maximum(h))
 end
 
 function coth(A::Bola)
-return Bola(coth(A.centro),(csch(A.centro)^2)*A.radio)
+h=Array(Float64,2)
+h[1]=abs(UpSubs(coth(A.centro+A.radio),coth(A.centro)))
+h[2]=abs(UpSubs(coth(A.centro-A.radio),coth(A.centro)))
+return Bola(coth(A.centro),maximum(h))
 end
 
 function sech(A::Bola)
-return Bola(sech(A.centro),tanh(A.centro)*sech(A.centro)*A.radio)
+h=Array(Float64,2)
+h[1]=abs(UpSubs(sech(A.centro+A.radio),sech(A.centro)))
+h[2]=abs(UpSubs(sech(A.centro-A.radio),sech(A.centro)))
+return Bola(sech(A.centro),maximum(h))
 end
 
 function csch(A::Bola)
-return Bola(csch(A.centro),csch(A.centro)*coth(A.centro)*A.radio)
+h=Array(Float64,2)
+h[1]=abs(UpSubs(csch(A.centro+A.radio),csch(A.centro)))
+h[2]=abs(UpSubs(csch(A.centro-A.radio),csch(A.centro)))
+return Bola(csch(A.centro),maximum(h))
 end
 
 function intersection(A::Bola,B::Bola)
