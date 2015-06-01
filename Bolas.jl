@@ -3,8 +3,9 @@ module Bolas
 import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,Base.asin,Base.acos,Base.atan,Base.acot,Base.asec,Base.acsc,Base.sinh,Base.cosh,Base.tanh,Base.coth,Base.sech,Base.csch
 
 
-
-export Bola, distancia, contiene, norma
+<<<<<<< HEAD
+export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas, operador_de_newton, quitar_no_deseadas
+>>>>>>> PabloNewton
 
 
 #Estas funciones sirven para hacer aritmética con redondeo dirigido
@@ -110,7 +111,7 @@ function norma(A) #Me dá la norma de un vector o un punto
 end
 
 
-function contiene(B::Bola,x)
+function contiene(B::Bola,x::Real)
 
     if distancia(B.centro,x)<= B.radio
         return(true)
@@ -118,6 +119,10 @@ function contiene(B::Bola,x)
         return(false)
     end
      
+end
+
+function contiene(A::Bola,B::Bola)
+    return(contiene(A,B.centro+B.radio)&&contiene(A,B.centro-B.radio)) 
 end
 
 function ==(A::Bola,B::Bola)
@@ -128,6 +133,76 @@ function ==(A::Bola,B::Bola)
      return false
      end
     
+end
+
+function bisectar_bolas(B)
+    
+    temp=Bola[]
+    
+    for i=1:length(B)
+        append!(temp,[Bola(B[i].centro-.5*B[i].radio,.5*B[i].radio),Bola(B[i].centro+.5*B[i].radio,.5*B[i].radio)])
+    end
+    
+    return(temp)
+    
+end
+
+function quitar_no_deseadas(F::Function,B,x)
+    
+    temp=Bola[]
+    dF(x)=F(makex(x)).d
+    
+    for i=1:length(B)
+        if contiene(F(B[i]),x)
+            push!(temp,B[i])
+        end
+    end
+    
+    return(temp)
+    
+    
+end
+
+function operador_de_newton_bola(F::Function,B::Bola)
+    
+    dF(x)=F(makex(x)).d
+    m=Bola(B.centro,1e-15)
+    
+    return (m-F(m)/(dF(B)))
+    
+end   
+
+
+
+function interseccion_de_bolas(A::Bola, B::Bola)
+    
+    if contiene(A,B)
+        return(B)
+    end
+    
+    if contiene(B,A)
+        return(A)
+    end
+    
+    if A.centro > B.centro
+        
+        if A.centro-A.radio > B.centro + B.radio
+            return(nothing)
+        end
+        
+        return(Bola((A.centro-A.radio+B.centro+B.radio)*.5,distancia((A.centro-A.radio+B.centro+B.radio)*.5,A.centro-A.radio)))
+        
+    end
+    
+    if B.centro > A.centro
+        
+        if B.centro-B.radio > A.centro + A.radio
+            return(nothing)
+        end
+        
+        return(Bola((B.centro-B.radio+A.centro+A.radio)*.5,distancia((B.centro-B.radio+A.centro+A.radio)*.5,B.centro-B.radio)))
+        
+    end
 end
     
 
@@ -176,18 +251,19 @@ end
 function /(A::Bola,B::Bola)
     
     if contiene(B,0)
-        error("No se puede dividir por una bola que contine el 0")
+       error("No se puede dividir por una bola que contine el 0")
     end
     
     return(Bola(A.centro/B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(1/B.centro),A.radio))))
 end
 
 function ^(A::Bola, n::Int)
-
+<<<<<<< HEAD
+    
     if n == -1
         return Bola(1,0)/A
-    end    
-
+    end
+>>>>>>> PabloNewton
 
     if n == 0
         return Bola(1,0)
