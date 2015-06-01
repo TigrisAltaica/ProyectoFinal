@@ -3,9 +3,9 @@ module Bolas
 import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,Base.asin,Base.acos,Base.atan,Base.acot,Base.asec,Base.acsc,Base.sinh,Base.cosh,Base.tanh,Base.coth,Base.sech,Base.csch
 
 
-<<<<<<< HEAD
+
 export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas, operador_de_newton, quitar_no_deseadas
->>>>>>> PabloNewton
+
 
 
 #Estas funciones sirven para hacer aritmética con redondeo dirigido
@@ -245,7 +245,7 @@ function *(A::Bola,c::Real)
 end
 
 function *(A::Bola,B::Bola)
-    return(Bola(A.centro*B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(B.centro),A.radio))))
+    return(Bola(A.centro*B.centro,UpSum(UpProd(norma(A.centro)+A.radio,B.radio),UpProd(norma(B.centro)+B.radio,A.radio))))
 end
 
 function /(A::Bola,B::Bola)
@@ -258,12 +258,11 @@ function /(A::Bola,B::Bola)
 end
 
 function ^(A::Bola, n::Int)
-<<<<<<< HEAD
     
     if n == -1
         return Bola(1,0)/A
     end
->>>>>>> PabloNewton
+
 
     if n == 0
         return Bola(1,0)
