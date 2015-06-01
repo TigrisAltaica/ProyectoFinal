@@ -348,11 +348,11 @@ h[2]=abs(UpSubs(csch(A.centro-A.radio),csch(A.centro)))
 return Bola(csch(A.centro),maximum(h))
 end
 
-function intersection(A::Bola,B::Bola)
+function 
+section(A::Bola,B::Bola)
     h=Array(BigFloat,4)
     ord=Array(BigFloat,4)
     inter=Array(BigFloat,2)
-
     if A==B
         return A
     end
