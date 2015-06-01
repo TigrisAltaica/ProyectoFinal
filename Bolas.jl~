@@ -216,9 +216,9 @@ end
 
 function cos(A::Bola)
 if A.centro<(pi/2)
-s=UpSubs(1,cos(A.radio))
+s=UpSubs(1.0,cos(A.radio))
 else
-s=UpSubs(cos(A.radio),1)
+s=UpSubs(cos(A.radio),1.0)
 end
 return Bola(cos(A.centro),UpSum(UpProd(s,cos(A.centro)),UpProd(sin(A.radio),sin(A.centro))))
 end

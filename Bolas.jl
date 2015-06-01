@@ -198,8 +198,20 @@ function ^(A::Bola, n::Int)
         return A
     end
     
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs((A.centro+A.radio)^n,(A.centro)^n))
+    h[2]=abs(UpSubs((A.centro-A.radio)^n,(A.centro)^n))
+
     
-    return Bola(A.centro^n,n*abs(A.centro)^(n-1)*A.radio+n*(n-1)*abs(A.centro)^(n-2)*A.radio)
+    if n%2==0
+    if contiene(A,0)
+    error("No hay manera adecuada de potenciar la bola")
+    else
+    return Bola((A.centro)^n,maximum(h))
+    end
+    end
+    
+    return Bola((A.centro)^n,maximum(h))
 end
 
 
