@@ -1,10 +1,12 @@
 module Bolas
 
+using Derivatives
+
 import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,Base.asin,Base.acos,Base.atan,Base.acot,Base.asec,Base.acsc,Base.sinh,Base.cosh,Base.tanh,Base.coth,Base.sech,Base.csch
 
 
 
-export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas, operador_de_newton, quitar_no_deseadas
+export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas, operador_de_newton, quitar_no_deseadas, metodo_newton_bola
 
 
 
@@ -147,33 +149,6 @@ function bisectar_bolas(B)
     
 end
 
-function quitar_no_deseadas(F::Function,B,x)
-    
-    temp=Bola[]
-    dF(x)=F(makex(x)).d
-    
-    for i=1:length(B)
-        if contiene(F(B[i]),x)
-            push!(temp,B[i])
-        end
-    end
-    
-    return(temp)
-    
-    
-end
-
-function operador_de_newton_bola(F::Function,B::Bola)
-    
-    dF(x)=F(makex(x)).d
-    m=Bola(B.centro,1e-15)
-    
-    return (m-F(m)/(dF(B)))
-    
-end   
-
-
-
 function interseccion_de_bolas(A::Bola, B::Bola)
     
     if contiene(A,B)
@@ -203,6 +178,140 @@ function interseccion_de_bolas(A::Bola, B::Bola)
         return(Bola((B.centro-B.radio+A.centro+A.radio)*.5,distancia((B.centro-B.radio+A.centro+A.radio)*.5,B.centro-B.radio)))
         
     end
+end
+
+function revisar_cercanas(A,B,tol) #revisa si una raíz dada está cerca de las demás
+    
+    for i = 1:length(B)
+        
+        if distancia(A,B[i]) <= tol
+            return(true) 
+        end
+        
+        
+    end
+    
+    return(false)
+end
+
+function quitar_repetidas(A,tol) #remueve raices que esten mas cerca que una cierta tolerancia
+   
+    temp=Bola[]
+    
+    for i=1:length(A)
+        
+        if !(revisar_cercanas(A[i],temp,tol))
+            push!(temp,A[i])
+        end
+        
+    end
+    
+    return(temp)
+end
+
+function quitar_no_deseadas(F::Function,B,x) #Funcion para quitar bolas donde la derivada de la funcion se hace cero
+    
+    temp=Bola[]
+    dF(x)=F(makex(x)).d
+    
+    for i=1:length(B)
+        if !contiene(dF(B[i]),x)
+            push!(temp,B[i])
+        end
+    end
+    
+    return(temp)
+end
+
+function quitar_no_utiles(F::Function,B,x) #Se encarga de quitar bolas que no contienen ceros de la funcion
+    
+    temp=Bola[]
+    
+    for i=1:length(B)
+        if contiene(F(B[i]),x)
+            push!(temp,B[i])
+        end
+    end
+    
+    return(temp)
+end
+
+
+
+function operador_de_newton_bola(F::Function,B::Bola) 
+    
+    dF(x)=F(makex(x)).d
+    m=Bola(B.centro,1e-16) #Le asigno un radio mínimo al punto m 
+    
+    
+    return (m-UpDiv(F(m),(dF(B))))
+    
+end   
+
+function metodo_newton_bola(F::Function, B::Bola)
+    
+    X=[B]
+    
+    i=0
+    tolbis=1e-3
+    tolradio=1e-15
+    tolsimilar = 1e-2
+    
+    while(X[1].radio>tolbis)
+        
+       X=bisectar_bolas(X)
+       X=quitar_no_utiles(F,X,0)
+    
+        
+        i+=1
+        
+        if i==50
+            break
+        end
+        
+        X
+ 
+    end
+    
+    X=quitar_no_deseadas(F,X,0)
+    
+    j=0
+    
+    radio_promedio=1
+    
+    while(tolradio<radio_promedio)
+        
+        radio_promedio=0
+        
+        
+        for i=1:length(X)
+            
+            temp=operador_de_newton_bola(F,X[i])
+            
+            if interseccion_de_bolas(X[i],temp)==nothing
+                X[i]=interseccion_de_bolas(B,temp)
+            else
+                X[i]=interseccion_de_bolas(X[i],temp)
+            end
+            
+            radio_promedio+=(X[i].radio)
+        end
+         
+        radio_promedio/=length(X)
+        
+        j+=1
+        
+        if j==50
+            break
+        end
+    end
+    
+    X=quitar_repetidas(X,tolsimilar)
+    
+    for i=1:length(X) 
+        println("Posible raíz en $(X[i].centro) ± $(X[i].radio)")
+    end
+    
 end
     
 
