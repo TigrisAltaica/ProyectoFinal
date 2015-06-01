@@ -160,7 +160,7 @@ end
 function operador_de_newton_bola(F::Function,B::Bola)
     
     dF(x)=F(makex(x)).d
-    m=Bola(B.centro,0)
+    m=Bola(B.centro,1e-15)
     
     return (m-F(m)/(dF(B)))
     
