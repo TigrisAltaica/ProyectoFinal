@@ -1,4 +1,4 @@
-module IntervalosDeBola
+module IntervalosDeBolas
 
 using Bolas
 using BolasTest

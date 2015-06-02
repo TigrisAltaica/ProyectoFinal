@@ -387,14 +387,6 @@ function ^(A::Bola, n::Int)
     h[2]=abs(UpSubs((A.centro-A.radio)^n,(A.centro)^n))
 
     
-    if n%2==0
-    if contiene(A,0)
-    error("No hay manera adecuada de potenciar la bola")
-    else
-    return Bola((A.centro)^n,maximum(h))
-    end
-    end
-    
     return Bola((A.centro)^n,maximum(h))
 end
 
