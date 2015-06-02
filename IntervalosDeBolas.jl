@@ -1,4 +1,4 @@
-module LibreriasDeBolas
+module IntervalosDeBola
 
 using Bolas
 using BolasTest
