@@ -254,7 +254,7 @@ return Bola(tan(A.centro),UpDiv(UpProd(tan(A.radio),UpSum(1.0,UpProd(tan(A.centr
 end
 
 function cot(A::Bola)
-if A.centro>0
+if A.centro<pi/2
 s=UpSubs(tan(A.centro),tan(A.radio))
 else
 s=UpSum(tan(A.centro),tan(A.radio))
