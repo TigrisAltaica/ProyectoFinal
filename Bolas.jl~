@@ -410,7 +410,11 @@ function ^(A::Bola, n::Int)
     h[2]=abs(UpSubs((A.centro-A.radio)^n,(A.centro)^n))
 
     
-
+<<<<<<< HEAD
+   
+    
+=======
+>>>>>>> 687274de44bd67e4cd86b5cfca9de3eccf53baa5
     return Bola((A.centro)^n,maximum(h))
 end
 
