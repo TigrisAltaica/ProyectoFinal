@@ -9,7 +9,7 @@ facts("Prueba básicas de Bolas:") do
     
 end
 
-facts("Pruebas de funciones para bolas :") do
+facts("Pruebas de funciones para bolas:") do
         
     A = Bola(0,1)
     B = Bola(1,2)
@@ -58,7 +58,9 @@ facts("Prueba básicas de aritmética:") do
     @fact contiene(B/C,(B.centro+B.radio)/(C.centro+C.radio)) => true
     @fact contiene(B/C,(B.centro+B.radio)/(C.centro-C.radio)) => true
     @fact contiene(B/C,(B.centro-B.radio)/(C.centro+C.radio)) => true
+
     @fact contiene(B/C,(B.centro-B.radio)/(C.centro-C.radio)) => true
+
 
     
 end
@@ -133,6 +135,7 @@ facts("Pruebas de funciones elementales:") do
     @fact contiene(log(E),log(.4)) => true
   
    
+
 end
 
 facts("Pruebas de funciones avanzadas:") do
@@ -159,6 +162,7 @@ facts("Pruebas de funciones avanzadas:") do
     @fact quitar_no_deseadas(f,bisectar_bolas([Bola(1,1)]),0)=>[Bola(1.5,.5)]
     g(x)=(x^2)-(2)
     @fact quitar_no_utiles(g,bisectar_bolas([Bola(1,1)]),0)=>[Bola(1.5,.5)]
+
 end
 
 end

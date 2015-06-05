@@ -81,7 +81,7 @@ type Bola
     radio
    
     Bola(c) = new(c,1)
-    Bola(c,r) = r < 0 ? new(c,abs(r)) : new(c,r)
+    Bola(c,r) = r < 0 ? new(c,abs(r)) : new(c,r) #Fuerza radio positivo
     
     
  end
@@ -114,7 +114,7 @@ function norma(A) #Me dá la norma de un vector o un punto
 end
 
 
-function contiene(B::Bola,x::Real)
+function contiene(B::Bola,x::Real) #revisa si un real se encuentra dentro de una bola dada
 
     if distancia(B.centro,x)<= B.radio
         return(true)
@@ -138,7 +138,7 @@ function ==(A::Bola,B::Bola)
     
 end
 
-function bisectar_bolas(B)
+function bisectar_bolas(B) #regresa un arreglo de dos bolas
     
     temp=Bola[]
     
@@ -150,7 +150,9 @@ function bisectar_bolas(B)
     
 end
 
-function interseccion_de_bolas(A::Bola, B::Bola)
+
+
+function interseccion_de_bolas(A::Bola, B::Bola) #Regresa la bola intersección, regresa nothing si esta es nula
     
     if contiene(A,B)
         return(B)
@@ -210,6 +212,8 @@ function quitar_repetidas(A,tol) #remueve raices que esten mas cerca que una cie
     return(temp)
 end
 
+
+
 function quitar_no_deseadas(F::Function,B,x) #Funcion para quitar bolas donde la derivada de la funcion se hace cero
     
     temp=Bola[]
@@ -249,12 +253,18 @@ function operador_de_newton_bola(F::Function,B::Bola)
     
 end   
 
-function metodo_newton_bola(F::Function, B::Bola)
+#Método de Newton con intervalos de bola
+#El método requiere una función, una bola inicial y una tolerancia de bisección, entre más fina mejor.
+#Si el método no logra actuar en alguno de los intervalos, avisa al usuario que debería probar con más bisección. 
+#Si una raíz se encuentra muy cerca de una raíz de la derivada el método falla.
+
+
+
+function metodo_newton_bola(F::Function, B::Bola,tolbis=1e-3)
     
     X=[B]
     
     i=0
-    tolbis=1e-3
     tolradio=1e-15
     tolsimilar = 1e-2
     
@@ -277,6 +287,8 @@ function metodo_newton_bola(F::Function, B::Bola)
     X=quitar_no_deseadas(F,X,0)
     
     j=0
+    
+    flag=X[1].radio
     
     radio_promedio=1
     
@@ -313,8 +325,18 @@ function metodo_newton_bola(F::Function, B::Bola)
         println("Posible raíz en $(X[i].centro) ± $(X[i].radio)")
     end
     
+    for i=1:length(X) 
+        if X[i].radio >= flag
+            println("El método de Newton no pudo actuar en todas las bolas, probar una tolerancia de bisección menor")
+            break
+        end
+    end
+    
+    
+    
 end
     
+#Operaciones Aritméticas
 
 function +(A::Bola,B::Bola)
     
@@ -388,8 +410,11 @@ function ^(A::Bola, n::Int)
     h[2]=abs(UpSubs((A.centro-A.radio)^n,(A.centro)^n))
 
     
+<<<<<<< HEAD
    
     
+=======
+>>>>>>> 687274de44bd67e4cd86b5cfca9de3eccf53baa5
     return Bola((A.centro)^n,maximum(h))
 end
 
@@ -397,146 +422,148 @@ end
 #Funciones elementales
 
 function sin(A::Bola)
-if A.centro>0
-s=UpSubs(1,cos(A.radio))
-else
-s=UpSubs(cos(A.radio),1)
-end
-return Bola(sin(A.centro),UpSum(UpProd(sin(A.centro),s),UpProd(sin(A.radio),cos(A.centro))))
+    if A.centro>0
+        s=UpSubs(1,cos(A.radio))
+    else
+        s=UpSubs(cos(A.radio),1)
+    end
+    
+    return Bola(sin(A.centro),UpSum(UpProd(sin(A.centro),s),UpProd(sin(A.radio),cos(A.centro))))
 end
 
 function cos(A::Bola)
-if A.centro<(pi/2)
-s=UpSubs(1.0,cos(A.radio))
-else
-s=UpSubs(cos(A.radio),1.0)
-end
-return Bola(cos(A.centro),UpSum(UpProd(s,cos(A.centro)),UpProd(sin(A.radio),sin(A.centro))))
+    if A.centro<(pi/2)
+        s=UpSubs(1.0,cos(A.radio))
+    else
+        s=UpSubs(cos(A.radio),1.0)
+    end
+    return Bola(cos(A.centro),UpSum(UpProd(s,cos(A.centro)),UpProd(sin(A.radio),sin(A.centro))))
 end
 
 function exp(A::Bola)
 
-return Bola(exp(A.centro),UpProd(exp(A.centro),UpSum(cosh(A.radio),UpSubs(sinh(A.radio),1))))
+    return Bola(exp(A.centro),UpProd(exp(A.centro),UpSum(cosh(A.radio),UpSubs(sinh(A.radio),1))))
 end
 
 function log(A::Bola)
-return Bola(log(A.centro),UpSubs(log(A.centro),log(A.centro-A.radio)))
+    return Bola(log(A.centro),UpSubs(log(A.centro),log(A.centro-A.radio)))
 end
 
 function tan(A::Bola)
-if A.centro>0
-s=UpSubs(1.0,UpProd(tan(A.radio),tan(A.centro)))
-else
-s=UpSum(1.0,UpProd(tan(A.centro),tan(A.radio)))
-end
-return Bola(tan(A.centro),UpDiv(UpProd(tan(A.radio),UpSum(1.0,UpProd(tan(A.centro),tan(A.centro)))),s))
+    if A.centro>0
+        s=UpSubs(1.0,UpProd(tan(A.radio),tan(A.centro)))
+    else
+        s=UpSum(1.0,UpProd(tan(A.centro),tan(A.radio)))
+    end
+    return Bola(tan(A.centro),UpDiv(UpProd(tan(A.radio),UpSum(1.0,UpProd(tan(A.centro),tan(A.centro)))),s))
 end
 
 function cot(A::Bola)
-if A.centro<pi/2
-s=UpSubs(tan(A.centro),tan(A.radio))
-else
-s=UpSum(tan(A.centro),tan(A.radio))
-end
-return Bola(cot(A.centro),UpProd(UpDiv(tan(A.radio),tan(A.centro)),UpDiv( UpSum(1,(tan(A.centro))^2),s )))
+    if A.centro<pi/2
+        s=UpSubs(tan(A.centro),tan(A.radio))
+    else
+        s=UpSum(tan(A.centro),tan(A.radio))
+    end
+    return Bola(cot(A.centro),UpProd(UpDiv(tan(A.radio),tan(A.centro)),UpDiv( UpSum(1,(tan(A.centro))^2),s )))
 end
 
 function sec(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(sec(A.centro+A.radio),sec(A.centro)))
-h[2]=abs(UpSubs(sec(A.centro-A.radio),sec(A.centro)))
-return Bola(sec(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(sec(A.centro+A.radio),sec(A.centro)))
+    h[2]=abs(UpSubs(sec(A.centro-A.radio),sec(A.centro)))
+    
+    return Bola(sec(A.centro),maximum(h))
 end
 
 function csc(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(csc(A.centro+A.radio),csc(A.centro)))
-h[2]=abs(UpSubs(csc(A.centro-A.radio),csc(A.centro)))
-return Bola(csc(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(csc(A.centro+A.radio),csc(A.centro)))
+    h[2]=abs(UpSubs(csc(A.centro-A.radio),csc(A.centro)))
+    return Bola(csc(A.centro),maximum(h))
 end
 
 function asin(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(asin(A.centro+A.radio),asin(A.centro)))
-h[2]=abs(UpSubs(asin(A.centro-A.radio),asin(A.centro)))
-return Bola(asin(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(asin(A.centro+A.radio),asin(A.centro)))
+    h[2]=abs(UpSubs(asin(A.centro-A.radio),asin(A.centro)))
+    return Bola(asin(A.centro),maximum(h))
 end
 
 function acos(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(acos(A.centro+A.radio),acos(A.centro)))
-h[2]=abs(UpSubs(acos(A.centro-A.radio),acos(A.centro)))
-return Bola(acos(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(acos(A.centro+A.radio),acos(A.centro)))
+    h[2]=abs(UpSubs(acos(A.centro-A.radio),acos(A.centro)))
+    return Bola(acos(A.centro),maximum(h))
 end
 
 function atan(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(atan(A.centro+A.radio),atan(A.centro)))
-h[2]=abs(UpSubs(atan(A.centro-A.radio),atan(A.centro)))
-return Bola(atan(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(atan(A.centro+A.radio),atan(A.centro)))
+    h[2]=abs(UpSubs(atan(A.centro-A.radio),atan(A.centro)))
+    return Bola(atan(A.centro),maximum(h))
 end
 
 function acot(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(acot(A.centro+A.radio),acot(A.centro)))
-h[2]=abs(UpSubs(acot(A.centro-A.radio),acot(A.centro)))
-return Bola(acot(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(acot(A.centro+A.radio),acot(A.centro)))
+    h[2]=abs(UpSubs(acot(A.centro-A.radio),acot(A.centro)))
+    return Bola(acot(A.centro),maximum(h))
 end
 
 function asec(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(asec(A.centro+A.radio),asec(A.centro)))
-h[2]=abs(UpSubs(asec(A.centro-A.radio),asec(A.centro)))
-return Bola(asec(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(asec(A.centro+A.radio),asec(A.centro)))
+    h[2]=abs(UpSubs(asec(A.centro-A.radio),asec(A.centro)))
+    return Bola(asec(A.centro),maximum(h))
 end
 
 function acsc(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(acsc(A.centro+A.radio),acsc(A.centro)))
-h[2]=abs(UpSubs(acsc(A.centro-A.radio),acsc(A.centro)))
-return Bola(acsc(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(acsc(A.centro+A.radio),acsc(A.centro)))
+    h[2]=abs(UpSubs(acsc(A.centro-A.radio),acsc(A.centro)))
+    return Bola(acsc(A.centro),maximum(h))
 end
 
 function sinh(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(sinh(A.centro+A.radio),sinh(A.centro)))
-h[2]=abs(UpSubs(sinh(A.centro-A.radio),sinh(A.centro)))
-return Bola(sinh(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(sinh(A.centro+A.radio),sinh(A.centro)))
+    h[2]=abs(UpSubs(sinh(A.centro-A.radio),sinh(A.centro)))
+    return Bola(sinh(A.centro),maximum(h))
 end
 
 function cosh(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(cosh(A.centro+A.radio),cosh(A.centro)))
-h[2]=abs(UpSubs(cosh(A.centro-A.radio),cosh(A.centro)))
-return Bola(cosh(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(cosh(A.centro+A.radio),cosh(A.centro)))
+    h[2]=abs(UpSubs(cosh(A.centro-A.radio),cosh(A.centro)))
+    return Bola(cosh(A.centro),maximum(h))
 end
 
 function tanh(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(tanh(A.centro+A.radio),tanh(A.centro)))
-h[2]=abs(UpSubs(tanh(A.centro-A.radio),tanh(A.centro)))
-return Bola(tanh(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(tanh(A.centro+A.radio),tanh(A.centro)))
+    h[2]=abs(UpSubs(tanh(A.centro-A.radio),tanh(A.centro)))
+    return Bola(tanh(A.centro),maximum(h))
 end
 
 function coth(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(coth(A.centro+A.radio),coth(A.centro)))
-h[2]=abs(UpSubs(coth(A.centro-A.radio),coth(A.centro)))
-return Bola(coth(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(coth(A.centro+A.radio),coth(A.centro)))
+    h[2]=abs(UpSubs(coth(A.centro-A.radio),coth(A.centro)))
+    return Bola(coth(A.centro),maximum(h))
 end
 
 function sech(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(sech(A.centro+A.radio),sech(A.centro)))
-h[2]=abs(UpSubs(sech(A.centro-A.radio),sech(A.centro)))
-return Bola(sech(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(sech(A.centro+A.radio),sech(A.centro)))
+    h[2]=abs(UpSubs(sech(A.centro-A.radio),sech(A.centro)))
+    return Bola(sech(A.centro),maximum(h))
 end
 
 function csch(A::Bola)
-h=Array(Float64,2)
-h[1]=abs(UpSubs(csch(A.centro+A.radio),csch(A.centro)))
-h[2]=abs(UpSubs(csch(A.centro-A.radio),csch(A.centro)))
-return Bola(csch(A.centro),maximum(h))
+    h=Array(Float64,2)
+    h[1]=abs(UpSubs(csch(A.centro+A.radio),csch(A.centro)))
+    h[2]=abs(UpSubs(csch(A.centro-A.radio),csch(A.centro)))
+    return Bola(csch(A.centro),maximum(h))
 end
 
 

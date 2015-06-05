@@ -1,9 +1,9 @@
 Pruebas.ipynb
 .ipynb_checkpoints/*
-~Bolas.jl
-~Derivatives.jl
-~BolasTest.jl
-<<<<<<< HEAD
+Bolas.jl~
+Derivatives.jl~
+BolasTest.jl~
 26754_1_other_wallpapers_samurai_japan.jpg
 .gitignore~
->>>>>>> PabloNewton
+*~
+
