@@ -9,7 +9,7 @@ facts("Prueba básicas de Bolas:") do
     
 end
 
-facts("Pruebas de funciones para bolas :") do
+facts("Pruebas de funciones para bolas:") do
         
     A = Bola(0,1)
     B = Bola(1,2)
@@ -52,7 +52,7 @@ facts("Prueba básicas de aritmética:") do
     @fact contiene(A*B,(A.centro-A.radio)*(B.centro-B.radio)) => true
     
     @fact contiene(B/C,(B.centro+B.radio)/(C.centro-C.radio)) => true
-    @fact contiene(B/C,(B.centro-B.radio)*(C.centro+C.radio)) => true
+    @fact contiene(B/C,(B.centro-B.radio)/(C.centro+C.radio)) => true
 
     
 end
@@ -127,11 +127,7 @@ facts("Pruebas de funciones elementales:") do
     @fact contiene(log(E),log(.4)) => true
   
    
-    
    
-    
-    
-
     
 end
 end
