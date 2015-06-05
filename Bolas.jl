@@ -6,7 +6,8 @@ import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,B
 
 
 
-export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas, operador_de_newton, quitar_no_deseadas, metodo_newton_bola
+export 
+Bola,distancia,contiene,norma,interseccion_de_bolas,bisectar_bolas,revisar_cercanas,quitar_repetidas,quitar_no_utiles,operador_de_newton,quitar_no_deseadas,metodo_newton_bola                           
 
 
 
@@ -387,13 +388,7 @@ function ^(A::Bola, n::Int)
     h[2]=abs(UpSubs((A.centro-A.radio)^n,(A.centro)^n))
 
     
-    if n%2==0
-    if contiene(A,0)
-    error("No hay manera adecuada de potenciar la bola")
-    else
-    return Bola((A.centro)^n,maximum(h))
-    end
-    end
+   
     
     return Bola((A.centro)^n,maximum(h))
 end

@@ -6,7 +6,8 @@ import Base.sin,Base.cos,Base.exp,Base.tan,Base.cot,Base.sec,Base.csc,Base.log,B
 
 
 
-export Bola, distancia, contiene, norma, interseccion_de_bolas, bisectar_bolas, operador_de_newton, quitar_no_deseadas, metodo_newton_bola
+export 
+Bola,distancia,contiene,norma,interseccion_de_bolas,bisectar_bolas,revisar_cercanas,quitar_repetidas,quitar_no_utiles,operador_de_newton,quitar_no_deseadas,metodo_newton_bola                           
 
 
 
@@ -387,13 +388,7 @@ function ^(A::Bola, n::Int)
     h[2]=abs(UpSubs((A.centro-A.radio)^n,(A.centro)^n))
 
     
-    if n%2==0
-    if contiene(A,0)
-    error("No hay manera adecuada de potenciar la bola")
-    else
-    return Bola((A.centro)^n,maximum(h))
-    end
-    end
+   
     
     return Bola((A.centro)^n,maximum(h))
 end
@@ -543,142 +538,6 @@ h[1]=abs(UpSubs(csch(A.centro+A.radio),csch(A.centro)))
 h[2]=abs(UpSubs(csch(A.centro-A.radio),csch(A.centro)))
 return Bola(csch(A.centro),maximum(h))
 end
-
-function 
-section(A::Bola,B::Bola)
-    h=Array(BigFloat,4)
-    ord=Array(BigFloat,4)
-    inter=Array(BigFloat,2)
-    if A==B
-        return A
-    end
-    
-    h[1]=(A.centro-A.radio)
-h[2]=(A.centro+A.radio)
-h[3]=(B.centro-B.radio)
-h[4]=(B.centro+B.radio)
-    ord[1]=minimum(h)
-    ord[4]=maximum(h)
-    
-    
-    
-    j=1
-    for i=1:4
-        
-        if h[i]!= minimum(h) && h[i]!= maximum(h)
-            inter[j]=h[i]
-       j=j+1
-        end
-    end
-    
-    
-    if inter[1]<= inter[2]
-        ord[2]=inter[1]
-        ord[3]=inter[2]
-    else
-        ord[2]=inter[2]
-        ord[3]=inter[1]
-    end
-    
-    
-    if (A.centro-A.radio)==ord[1]
-        
-        if (A.centro+A.radio)==ord[2]
-            return 0
-            else
-            return Bola((ord[2]+ord[3])/2,(ord[3]-ord[2])/2) 
-        end
-        
-        elseif (A.centro-A.radio)==ord[2]
-        
-        return Bola((ord[2]+ord[3])/2,(ord[3]-ord[2])/2)
-        
-        elseif (A.centro-A.radio)==ord[3]
-        
-        return 0
-    end
-
-end
-
-function N(X,g,dg,x)
-x-(g(x)*(dg(X)^-1))
-end
-
-
-
-
-function NOperator(X,g,dg)
-m=X.centro
-N(X,g,dg,m)
-end
-
-
-function intervalRoot(X,g,dg)
-    if (dg(X).centro+dg(X).radio)*(dg(X).centro-dg(X).radio)<0
-        X1=Bola((X.centro-X.radio-.0000000000000000000000000000000000001)/2,(-.0000000000000000000000000000000000001-(X.centro-X.radio))/2)
-        X2=Bola(X.centro+X.radio/2,(X.centro+X.radio)/2)
-    
-        
-        
-         if intersection(X1,NOperator(X1,g,dg))==0
-            println("no hay raiz en el intervalo negativo")
-         else
-         Y=intersection(X1,NOperator(X1,g,dg))
-            
-         while Y !=0 && (2*Y.radio) > .0000001   
-         Y=intersection(Y,NOperator(Y,g,dg))
-         end 
-            if Y==0
-            println("no hay raiz en el intervalo negativo")
-            else
-            println(Y)
-            end
-         end
-        
-        if intersection(X2,NOperator(X2,g,dg))==0
-            println("no hay raiz en el intervalo positivo")
-        else
-        Y=intersection(X2,NOperator(X2,g,dg))
-    
-        while Y !=0 && (2*Y.radio) > .0000001     
-      
-        Y=intersection(Y,NOperator(Y,g,dg))
-      
-        end    
-            if Y==0
-                println("no hay raiz en el intervalo positivo")
-            else
-            println(Y)
-            end
-      
-        end
-        
-   else   
-    
-    if intersection(X,NOperator(X,g,dg))==0
-        println("no hay raiz en el intervalo")
-    else
-      Y=intersection(X,NOperator(X,g,dg))
-    
-    while Y !=0 && (2*Y.radio) > .0000001      
-      
-        Y=intersection(Y,NOperator(Y,g,dg))
-      
-    end    
-              if Y==0
-            println("no hay raiz en el intervalo negativo")
-            else
-                return Y
-            end
-      
-    end
-    end
-    
-end
-
-
-
-
 
 
 end 

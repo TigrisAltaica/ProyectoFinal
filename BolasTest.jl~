@@ -20,8 +20,12 @@ facts("Pruebas de funciones para bolas :") do
     @fact contiene(A,A.centro+A.radio) => true
     @fact contiene(A,A.centro-A.radio) => true
     @fact contiene(A,A.centro+2*A.radio) => false
+    @fact contiene(B,A)=>true
+    @fact contiene(A,A)=>true
     @fact distancia(A.centro,A.centro+A.radio) => A.radio
     @fact distancia(A,B) => 1
+    
+    
     
     
 end
@@ -51,8 +55,10 @@ facts("Prueba básicas de aritmética:") do
     @fact contiene(A*B,(A.centro+A.radio)*(B.centro+B.radio)) => true
     @fact contiene(A*B,(A.centro-A.radio)*(B.centro-B.radio)) => true
     
+    @fact contiene(B/C,(B.centro+B.radio)/(C.centro+C.radio)) => true
     @fact contiene(B/C,(B.centro+B.radio)/(C.centro-C.radio)) => true
-    @fact contiene(B/C,(B.centro-B.radio)*(C.centro+C.radio)) => true
+    @fact contiene(B/C,(B.centro-B.radio)/(C.centro+C.radio)) => true
+    @fact contiene(B/C,(B.centro-B.radio)/(C.centro-C.radio)) => true
 
     
 end
@@ -127,11 +133,32 @@ facts("Pruebas de funciones elementales:") do
     @fact contiene(log(E),log(.4)) => true
   
    
-    
-   
-    
-    
-
-    
 end
+
+facts("Pruebas de funciones avanzadas:") do
+    
+        
+    A = Bola(0,1)
+    B = Bola(1,2)
+    C = Bola(5,.2)  
+    D = Bola(5,3)
+    
+    @fact bisectar_bolas([A]) => [Bola(-.5,.5),Bola(.5,.5)]
+    @fact bisectar_bolas(bisectar_bolas([A])) => [Bola(-.75,.25),Bola(-.25,.25),Bola(.25,.25),Bola(.75,.25)]
+    @fact interseccion_de_bolas(A,A)=>A
+    @fact interseccion_de_bolas(A,B)=>A
+    @fact interseccion_de_bolas(B,A)=>A
+    @fact interseccion_de_bolas(B,C)=>nothing
+    @fact interseccion_de_bolas(B,D)=>Bola(2.5,.5)
+    @fact interseccion_de_bolas(D,B)=>interseccion_de_bolas(B,D)
+    @fact revisar_cercanas(B,[C],4)=>true
+    @fact revisar_cercanas(B,[C],3.9)=>false
+    @fact quitar_repetidas([Bola(-.7,.25),Bola(-.6,.25),Bola(.4,.25),Bola(.5,.25)],.1)=>[Bola(-.7,.25),Bola(.4,.25)]
+    @fact quitar_repetidas([Bola(-.7,.25),Bola(-.6,.25),Bola(.4,.25),Bola(.5,.25)],1.1)=>[Bola(-.7,.25),Bola(.5,.25)] 
+    f(x)=(x^2)-(x)
+    @fact quitar_no_deseadas(f,bisectar_bolas([Bola(1,1)]),0)=>[Bola(1.5,.5)]
+    g(x)=(x^2)-(2)
+    @fact quitar_no_utiles(g,bisectar_bolas([Bola(1,1)]),0)=>[Bola(1.5,.5)]
+end
+
 end
